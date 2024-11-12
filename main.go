@@ -34,12 +34,13 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 )
 
 type Task struct {
-	Id     int
-	Title  string
-	Finish bool
+	Id    int
+	Title string
+	Done  bool
 }
 
 var tasks []Task
@@ -56,6 +57,7 @@ func handleUserInput(scanner *bufio.Scanner) {
 		fmt.Println("\nMy First TODO List App in Go:")
 		fmt.Println("1. View Tasks")
 		fmt.Println("2. Add Task")
+		fmt.Println("3. Mark task as done")
 
 		scanner.Scan()
 		choice := scanner.Text()
@@ -65,6 +67,8 @@ func handleUserInput(scanner *bufio.Scanner) {
 			viewTasks()
 		case "2":
 			addTask(scanner)
+		case "3":
+			updateTask(scanner)
 		default:
 			return
 		}
@@ -79,11 +83,11 @@ func viewTasks() {
 	}
 
 	for _, task := range tasks {
-		taskFinished := "(task in progress)"
-		if task.Finish {
-			taskFinished = "(task done)"
+		taskDone := "(task in progress)"
+		if task.Done {
+			taskDone = "(task done)"
 		}
-		fmt.Printf("%d. %s %s\n", task.Id, task.Title, taskFinished)
+		fmt.Printf("%d. %s %s\n", task.Id, task.Title, taskDone)
 	}
 }
 
@@ -93,11 +97,41 @@ func addTask(scanner *bufio.Scanner) {
 	text := scanner.Text()
 
 	task := Task{
-		Id:     nextId,
-		Title:  text,
-		Finish: false,
+		Id:    nextId,
+		Title: text,
+		Done:  false,
 	}
 	tasks = append(tasks, task)
 	nextId++
-	fmt.Printf("Task \"%s\" successfully!\n", text)
+	fmt.Printf("Task \"%s\" added successfully!\n", text)
+}
+
+func updateTask(scanner *bufio.Scanner) {
+	fmt.Print("\nEnter the task id to update: ")
+	scanner.Scan()
+	input := scanner.Text()
+
+	id, err := strconv.Atoi(input)
+	if err != nil {
+		fmt.Println("Invalid Id.")
+		return
+	}
+
+	if len(tasks) == 0 {
+		fmt.Println("You need to add a new task.")
+		return
+	}
+
+	for _, task := range tasks {
+		if task.Id == id {
+			if !task.Done {
+				task.Done = true
+				fmt.Println(task.Id)
+				fmt.Println(task.Title)
+				fmt.Println(task.Done)
+				fmt.Println("Task updated successfully!")
+				break
+			}
+		}
+	}
 }
