@@ -94,19 +94,24 @@ func viewTasks() {
 func addTask(scanner *bufio.Scanner) {
 	fmt.Println("Enter task description: ")
 	scanner.Scan()
-	text := scanner.Text()
+	taskTitle := scanner.Text()
 
 	task := Task{
 		Id:    nextId,
-		Title: text,
+		Title: taskTitle,
 		Done:  false,
 	}
 	tasks = append(tasks, task)
 	nextId++
-	fmt.Printf("Task \"%s\" added successfully!\n", text)
+	fmt.Printf("Task \"%s\" added successfully!\n", taskTitle)
 }
 
 func updateTask(scanner *bufio.Scanner) {
+	if len(tasks) == 0 {
+		fmt.Println("You need to add a new task.")
+		return
+	}
+
 	fmt.Print("\nEnter the task id to update: ")
 	scanner.Scan()
 	input := scanner.Text()
@@ -117,19 +122,11 @@ func updateTask(scanner *bufio.Scanner) {
 		return
 	}
 
-	if len(tasks) == 0 {
-		fmt.Println("You need to add a new task.")
-		return
-	}
-
-	for _, task := range tasks {
-		if task.Id == id {
-			if !task.Done {
-				task.Done = true
-				fmt.Println(task.Id)
-				fmt.Println(task.Title)
-				fmt.Println(task.Done)
-				fmt.Println("Task updated successfully!")
+	for i := range tasks {
+		if tasks[i].Id == id {
+			if !tasks[i].Done {
+				tasks[i].Done = true
+				fmt.Printf("Task \"%s\" updated successfully!\n", tasks[i].Title)
 				break
 			}
 		}
