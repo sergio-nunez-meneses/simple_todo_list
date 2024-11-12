@@ -100,20 +100,14 @@ func updateTask(scanner *bufio.Scanner) {
 		return
 	}
 
-	idExists := false
 	for i := range tasks {
 		if tasks[i].Id == id {
 			if !tasks[i].Done {
 				tasks[i].Done = true
 				fmt.Printf("Task \"%s\" updated successfully!\n", tasks[i].Title)
-				idExists = true
 				break
 			}
 		}
-	}
-
-	if !idExists {
-		fmt.Printf("Task with Id %d not found.\n", id)
 	}
 }
 
