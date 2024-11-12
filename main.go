@@ -58,6 +58,7 @@ func handleUserInput(scanner *bufio.Scanner) {
 		fmt.Println("1. View Tasks")
 		fmt.Println("2. Add Task")
 		fmt.Println("3. Mark task as done")
+		fmt.Println("4. Delete task")
 
 		scanner.Scan()
 		choice := scanner.Text()
@@ -69,6 +70,8 @@ func handleUserInput(scanner *bufio.Scanner) {
 			addTask(scanner)
 		case "3":
 			updateTask(scanner)
+		case "4":
+			deleteTask(scanner)
 		default:
 			return
 		}
@@ -130,5 +133,35 @@ func updateTask(scanner *bufio.Scanner) {
 				break
 			}
 		}
+		fmt.Println("Task not found.")
+		return
+	}
+}
+
+func deleteTask(scanner *bufio.Scanner) {
+	if len(tasks) == 0 {
+		fmt.Println("You need to add a new task.")
+		return
+	}
+
+	fmt.Print("\nEnter the task id to delete: ")
+	scanner.Scan()
+	input := scanner.Text()
+
+	id, err := strconv.Atoi(input)
+	if err != nil {
+		fmt.Println("Invalid Id.")
+		return
+	}
+
+	for i := range tasks {
+		if tasks[i].Id == id {
+			taskTitle := tasks[i].Title
+			tasks = append(tasks[:i], tasks[i+1:]...)
+			fmt.Printf("Task \"%s\" deleted successfully!\n", taskTitle)
+			break
+		}
+		fmt.Println("Task not found.")
+		return
 	}
 }
