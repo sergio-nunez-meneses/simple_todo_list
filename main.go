@@ -13,13 +13,19 @@ type Task struct {
 	Done  bool
 }
 
+type TodoList struct {
+	Id   int
+	Name string
+	List []Task
+}
+
+// The make function allocates and initializes a hash map data structure and returns a map value that points to it
+// var todoLists = make(map[string] *TodoList)
 var tasks []Task
 var nextId = 1
 
 func main() {
-	scanner := bufio.NewScanner(os.Stdin)
-
-	handleUserInput(scanner)
+	handleUserInput(bufio.NewScanner(os.Stdin))
 }
 
 func handleUserInput(scanner *bufio.Scanner) {
