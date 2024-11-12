@@ -59,7 +59,9 @@ func handleUserInput(scanner *bufio.Scanner) {
 		fmt.Println("2. Add Task")
 		fmt.Println("3. Mark task as done")
 		fmt.Println("4. Delete task")
+		fmt.Println("5. Exit")
 
+		fmt.Print("Choose an option: ")
 		scanner.Scan()
 		choice := scanner.Text()
 
@@ -72,6 +74,9 @@ func handleUserInput(scanner *bufio.Scanner) {
 			updateTask(scanner)
 		case "4":
 			deleteTask(scanner)
+		case "5":
+			fmt.Println("Exiting...")
+			return
 		default:
 			return
 		}
