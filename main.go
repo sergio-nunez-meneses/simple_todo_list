@@ -29,3 +29,12 @@ Objectif : Créer un programme en Go qui permet de gérer une liste de tâches a
 */
 
 package main
+
+type Task struct {
+	Id     int
+	Title  string
+	Finish bool
+}
+
+var tasks []Task
+var nextId = 1
