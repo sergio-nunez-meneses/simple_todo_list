@@ -27,3 +27,5 @@ Objectif : Créer un programme en Go qui permet de gérer une liste de tâches a
         4. Supprimer une tâche
         5. Quitter
 */
+
+package main
