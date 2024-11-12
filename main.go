@@ -53,9 +53,32 @@ func main() {
 
 func handleUserInput(scanner *bufio.Scanner) {
 	for {
-		scanner.Scan()
-		fmt.Printf(scanner.Text())
+		fmt.Println("\nMy First TODO List App in Go:")
+		fmt.Println("2. Add Task")
 
-		return
+		scanner.Scan()
+		choice := scanner.Text()
+
+		switch choice {
+		case "2":
+			addTask(scanner)
+		default:
+			return
+		}
 	}
+}
+
+func addTask(scanner *bufio.Scanner) {
+	fmt.Println("Enter the task description: ")
+	scanner.Scan()
+	text := scanner.Text()
+
+	task := Task{
+		Id:     nextId,
+		Title:  text,
+		Finish: false,
+	}
+	tasks = append(tasks, task)
+	nextId++
+	fmt.Printf("Task \"%s\" successfully!\n", text)
 }
