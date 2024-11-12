@@ -84,12 +84,12 @@ func handleUserInput(scanner *bufio.Scanner) {
 }
 
 func viewTasks() {
-	fmt.Println("\nList:")
 	if len(tasks) == 0 {
 		fmt.Println("No new tasks.")
 		return
 	}
 
+	fmt.Println("\nList:")
 	for _, task := range tasks {
 		taskDone := "(task in progress)"
 		if task.Done {
