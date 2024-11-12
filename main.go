@@ -30,6 +30,12 @@ Objectif : Créer un programme en Go qui permet de gérer une liste de tâches a
 
 package main
 
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
 type Task struct {
 	Id     int
 	Title  string
@@ -38,3 +44,14 @@ type Task struct {
 
 var tasks []Task
 var nextId = 1
+
+func main() {
+	scanner := bufio.NewScanner(os.Stdin)
+
+	for {
+		scanner.Scan()
+		fmt.Printf(scanner.Text())
+
+		return
+	}
+}
