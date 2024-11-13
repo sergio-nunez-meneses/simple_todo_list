@@ -52,6 +52,14 @@ func (handler *TodoListHandler) ShowLists() {
 	}
 }
 
+func (handler *TodoListHandler) SetEmptyList(name string) {
+	handler.Lists[name] = &TodoList{
+		Id:   1,
+		Name: name,
+		List: []Task{},
+	}
+}
+
 var todoLists = make(map[string]*TodoList)
 
 func handleUserInput(scanner *bufio.Scanner) {
