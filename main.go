@@ -42,10 +42,6 @@ func (handler *TodoListHandler) GetLists() map[string]*TodoList {
 
 var todoLists = make(map[string]*TodoList)
 
-func main() {
-	handleUserInput(bufio.NewScanner(os.Stdin))
-}
-
 func handleUserInput(scanner *bufio.Scanner) {
 	for {
 		fmt.Println("\nTODO list handler:")
@@ -74,6 +70,10 @@ func handleUserInput(scanner *bufio.Scanner) {
 			fmt.Println("Invalid option, choose an one from 1 to 5.")
 		}
 	}
+}
+
+func main() {
+	handleUserInput(bufio.NewScanner(os.Stdin))
 }
 
 func showLists() {
