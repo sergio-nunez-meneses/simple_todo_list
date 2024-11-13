@@ -102,8 +102,9 @@ func handleList(scanner *bufio.Scanner) {
 		return
 	}
 
+	list := todoLists[listName]
 	for {
-		fmt.Printf("Updating list \"%s\"\n", listName)
+		fmt.Printf("Updating list \"%s\":\n", listName)
 		fmt.Println("1. Show tasks")
 		fmt.Println("2. Add task")
 		fmt.Println("3. Mark task as \"done\"")
@@ -115,7 +116,7 @@ func handleList(scanner *bufio.Scanner) {
 
 		switch scanner.Text() {
 		case "1":
-			viewTasks()
+			showTasks(list)
 		case "2":
 			addTask(scanner)
 		case "3":
@@ -154,14 +155,14 @@ func listExists(listName string) bool {
 	return exists
 }
 
-func viewTasks() {
-	if len(tasks) == 0 {
+func showTasks(list *TodoList) {
+	if len(list.List) == 0 {
 		fmt.Println("No new tasks.")
 		return
 	}
 
-	fmt.Println("\nList:")
-	for _, task := range tasks {
+	fmt.Printf("Tasks in list \"%s\\n", list.Name)
+	for _, task := range list.List {
 		taskDone := "(task in progress)"
 		if task.Done {
 			taskDone = "(task done)"
