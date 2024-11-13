@@ -20,8 +20,6 @@ type TodoList struct {
 }
 
 var todoLists = make(map[string]*TodoList)
-var tasks []Task
-var nextId = 1
 
 func main() {
 	handleUserInput(bufio.NewScanner(os.Stdin))
@@ -120,7 +118,7 @@ func handleList(scanner *bufio.Scanner) {
 		case "2":
 			addTask(scanner, list)
 		case "3":
-			updateTask(scanner)
+			updateTask(scanner, list)
 		case "4":
 			deleteTask(scanner, list)
 		case "5":
@@ -186,8 +184,8 @@ func addTask(scanner *bufio.Scanner, list *TodoList) {
 	fmt.Printf("Task \"%s\" added successfully to list \"%s\"!\n", taskTitle, list.Name)
 }
 
-func updateTask(scanner *bufio.Scanner) {
-	if len(tasks) == 0 {
+func updateTask(scanner *bufio.Scanner, list *TodoList) {
+	if len(list.List) == 0 {
 		fmt.Println("You need to add a new task.")
 		return
 	}
@@ -202,11 +200,11 @@ func updateTask(scanner *bufio.Scanner) {
 		return
 	}
 
-	for i := range tasks {
-		if tasks[i].Id == id {
-			if !tasks[i].Done {
-				tasks[i].Done = true
-				fmt.Printf("Task \"%s\" updated successfully!\n", tasks[i].Title)
+	for i := range list.List {
+		if list.List[i].Id == id {
+			if !list.List[i].Done {
+				list.List[i].Done = true
+				fmt.Printf("Task \"%s\" updated successfully from list \"%s\"!\n", list.List[i].Title, list.Name)
 				break
 			}
 		}
