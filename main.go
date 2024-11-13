@@ -19,7 +19,6 @@ type TodoList struct {
 	List []Task
 }
 
-// The make function allocates and initializes a hash map data structure and returns a map value that points to it
 var todoLists = make(map[string]*TodoList)
 var tasks []Task
 var nextId = 1
@@ -31,15 +30,18 @@ func main() {
 func handleUserInput(scanner *bufio.Scanner) {
 	for {
 		fmt.Println("\nTODO Lists:")
-		fmt.Println("1. Show Lists")
+		fmt.Println("1. Show lists")
+		fmt.Println("2. Create new list")
 		fmt.Println("5. Exit")
 
 		fmt.Print("Choose an option: ")
 		scanner.Scan()
-		option := scanner.Text()
-		switch option {
+
+		switch scanner.Text() {
 		case "1":
 			showLists()
+		case "2":
+			createList(scanner)
 		case "5":
 			fmt.Println("Exiting...")
 			return
@@ -88,6 +90,24 @@ func showLists() {
 	for _, list := range todoLists {
 		fmt.Printf("%d. %s\n", list.Id, list.Name)
 	}
+}
+
+func createList(scanner *bufio.Scanner) {
+	fmt.Println("Enter list name: ")
+	scanner.Scan()
+	listName := scanner.Text()
+
+	if _, exists := todoLists[listName]; exists {
+		fmt.Println("List name already in use")
+		return
+	}
+
+	todoLists[listName] = &TodoList{
+		Id:   1,
+		Name: listName,
+		List: []Task{},
+	}
+	fmt.Printf("New list \"%s\" created successfully!", listName)
 }
 
 func viewTasks() {
