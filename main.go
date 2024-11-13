@@ -97,7 +97,7 @@ func createList(scanner *bufio.Scanner) {
 	scanner.Scan()
 	listName := scanner.Text()
 
-	if _, exists := todoLists[listName]; exists {
+	if listExists(listName) {
 		fmt.Println("List name already in use")
 		return
 	}
@@ -108,6 +108,11 @@ func createList(scanner *bufio.Scanner) {
 		List: []Task{},
 	}
 	fmt.Printf("New list \"%s\" created successfully!", listName)
+}
+
+func listExists(listName string) bool {
+	_, exists := todoLists[listName]
+	return exists
 }
 
 func viewTasks() {
