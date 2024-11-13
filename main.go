@@ -20,7 +20,7 @@ type TodoList struct {
 }
 
 // The make function allocates and initializes a hash map data structure and returns a map value that points to it
-// var todoLists = make(map[string] *TodoList)
+var todoLists = make(map[string]*TodoList)
 var tasks []Task
 var nextId = 1
 
@@ -30,32 +30,63 @@ func main() {
 
 func handleUserInput(scanner *bufio.Scanner) {
 	for {
-		fmt.Println("\nMy First TODO List App in Go:")
-		fmt.Println("1. View Tasks")
-		fmt.Println("2. Add Task")
-		fmt.Println("3. Mark task as done")
-		fmt.Println("4. Delete task")
+		fmt.Println("\nTODO Lists:")
+		fmt.Println("1. Show Lists")
 		fmt.Println("5. Exit")
 
 		fmt.Print("Choose an option: ")
 		scanner.Scan()
-		choice := scanner.Text()
-
-		switch choice {
+		option := scanner.Text()
+		switch option {
 		case "1":
-			viewTasks()
-		case "2":
-			addTask(scanner)
-		case "3":
-			updateTask(scanner)
-		case "4":
-			deleteTask(scanner)
+			showLists()
 		case "5":
 			fmt.Println("Exiting...")
 			return
 		default:
+			fmt.Println("Exiting...")
 			return
 		}
+	}
+	//for {
+	//	fmt.Println("\nMy First TODO List App in Go:")
+	//	fmt.Println("1. View Tasks")
+	//	fmt.Println("2. Add Task")
+	//	fmt.Println("3. Mark task as done")
+	//	fmt.Println("4. Delete task")
+	//	fmt.Println("5. Exit")
+	//
+	//	fmt.Print("Choose an option: ")
+	//	scanner.Scan()
+	//	choice := scanner.Text()
+	//
+	//	switch choice {
+	//	case "1":
+	//		viewTasks()
+	//	case "2":
+	//		addTask(scanner)
+	//	case "3":
+	//		updateTask(scanner)
+	//	case "4":
+	//		deleteTask(scanner)
+	//	case "5":
+	//		fmt.Println("Exiting...")
+	//		return
+	//	default:
+	//		return
+	//	}
+	//}
+}
+
+func showLists() {
+	if len(todoLists) == 0 {
+		fmt.Println("No new lists.")
+		return
+	}
+
+	fmt.Println("\nLists:")
+	for _, list := range todoLists {
+		fmt.Printf("%d. %s\n", list.Id, list.Name)
 	}
 }
 
