@@ -74,6 +74,10 @@ func (handler *TodoListHandler) CreateList(scanner *bufio.Scanner) {
 	fmt.Printf("\nNew list \"%s\" created successfully!", listName)
 }
 
+func (handler *TodoListHandler) UpdateList(scanner *bufio.Scanner) {
+	//
+}
+
 func (handler *TodoListHandler) DeleteList(scanner *bufio.Scanner) {
 	if handler.IsEmpty() {
 		fmt.Println("\nYou need to add a new list.")
