@@ -40,9 +40,23 @@ func (handler *TodoListHandler) GetLists() map[string]*TodoList {
 	return handler.Lists
 }
 
+func (handler *TodoListHandler) ShowLists() {
+	if handler.IsEmpty() {
+		fmt.Println("\nNo new lists.")
+		return
+	}
+
+	fmt.Println("\nCurrent lists:")
+	for _, list := range handler.GetLists() {
+		fmt.Printf("- %s\n", list.Name)
+	}
+}
+
 var todoLists = make(map[string]*TodoList)
 
 func handleUserInput(scanner *bufio.Scanner) {
+	handler := ListHandler()
+
 	for {
 		fmt.Println("\nTODO list handler:")
 		fmt.Println("1. Show lists")
@@ -56,7 +70,7 @@ func handleUserInput(scanner *bufio.Scanner) {
 
 		switch scanner.Text() {
 		case "1":
-			showLists()
+			handler.ShowLists()
 		case "2":
 			createList(scanner)
 		case "3":
@@ -74,18 +88,6 @@ func handleUserInput(scanner *bufio.Scanner) {
 
 func main() {
 	handleUserInput(bufio.NewScanner(os.Stdin))
-}
-
-func showLists() {
-	if len(todoLists) == 0 {
-		fmt.Println("No new lists.")
-		return
-	}
-
-	fmt.Println("\nLists:")
-	for _, list := range todoLists {
-		fmt.Printf("%d. %s\n", list.Id, list.Name)
-	}
 }
 
 func createList(scanner *bufio.Scanner) {
