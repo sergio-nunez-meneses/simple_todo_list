@@ -74,6 +74,25 @@ func (handler *TodoListHandler) CreateList(scanner *bufio.Scanner) {
 	fmt.Printf("\nNew list \"%s\" created successfully!", listName)
 }
 
+func (handler *TodoListHandler) DeleteList(scanner *bufio.Scanner) {
+	if handler.IsEmpty() {
+		fmt.Println("\nYou need to add a new list.")
+		return
+	}
+
+	fmt.Println("\nEnter the list name to delete:")
+	scanner.Scan()
+	listName := scanner.Text()
+
+	if handler.GetList(listName) == nil {
+		fmt.Println("\nList does not exist.")
+		return
+	}
+
+	delete(handler.Lists, listName)
+	fmt.Printf("\nList \"%s\" deleted successfully!", listName)
+}
+
 var todoLists = make(map[string]*TodoList)
 
 func handleUserInput(scanner *bufio.Scanner) {
@@ -98,7 +117,7 @@ func handleUserInput(scanner *bufio.Scanner) {
 		case "3":
 			handleList(scanner)
 		case "4":
-			deleteList(scanner)
+			handler.DeleteList(scanner)
 		case "5":
 			fmt.Println("Exiting...")
 			return
@@ -154,25 +173,6 @@ func handleList(scanner *bufio.Scanner) {
 			fmt.Println("Invalid option, choose an one from 1 to 5.")
 		}
 	}
-}
-
-func deleteList(scanner *bufio.Scanner) {
-	if len(todoLists) == 0 {
-		fmt.Println("You need to add a new list.")
-		return
-	}
-
-	fmt.Println("Enter the list name to delete: ")
-	scanner.Scan()
-	listName := scanner.Text()
-
-	if !listExists(listName) {
-		fmt.Println("List does not exist.")
-		return
-	}
-
-	delete(todoLists, listName)
-	fmt.Printf("List \"%s\" deleted successfully!", listName)
 }
 
 func listExists(listName string) bool {
