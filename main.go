@@ -36,10 +36,6 @@ func (handler *TodoListHandler) IsEmpty() bool {
 	return len(handler.Lists) == 0
 }
 
-func (handler *TodoListHandler) GetLists() map[string]*TodoList {
-	return handler.Lists
-}
-
 func (handler *TodoListHandler) ShowLists() {
 	if handler.IsEmpty() {
 		fmt.Println("\nNo new lists.")
@@ -47,7 +43,7 @@ func (handler *TodoListHandler) ShowLists() {
 	}
 
 	fmt.Println("\nCurrent lists:")
-	for _, list := range handler.GetLists() {
+	for _, list := range handler.Lists {
 		fmt.Printf("- %s\n", list.Name)
 	}
 }
@@ -58,6 +54,10 @@ func (handler *TodoListHandler) SetEmptyList(name string) {
 		Name: name,
 		List: []Task{},
 	}
+}
+
+func (handler *TodoListHandler) GetList(name string) *TodoList {
+	return handler.Lists[name]
 }
 
 var todoLists = make(map[string]*TodoList)
