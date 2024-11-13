@@ -52,7 +52,7 @@ func handleUserInput(scanner *bufio.Scanner) {
 			fmt.Println("Exiting...")
 			return
 		default:
-			fmt.Println("Invalid option, choose an option from 1 to 5.")
+			fmt.Println("Invalid option, choose an one from 1 to 5.")
 		}
 	}
 }
@@ -102,35 +102,32 @@ func handleList(scanner *bufio.Scanner) {
 		return
 	}
 
-	//for {
-	//	fmt.Println("\nMy First TODO List App in Go:")
-	//	fmt.Println("1. View Tasks")
-	//	fmt.Println("2. Add Task")
-	//	fmt.Println("3. Mark task as done")
-	//	fmt.Println("4. Delete task")
-	//	fmt.Println("5. Exit")
-	//
-	//	fmt.Print("Choose an option: ")
-	//	scanner.Scan()
-	//	choice := scanner.Text()
-	//
-	//	switch choice {
-	//	case "1":
-	//		viewTasks()
-	//	case "2":
-	//		addTask(scanner)
-	//	case "3":
-	//		updateTask(scanner)
-	//	case "4":
-	//		deleteTask(scanner)
-	//	case "5":
-	//		fmt.Println("Exiting...")
-	//		return
-	//	default:
-	//		return
-	//	}
-	//}
-	fmt.Printf("Task added to list \"%s\" successfully!", listName)
+	for {
+		fmt.Printf("Updating list \"%s\"\n", listName)
+		fmt.Println("1. Show tasks")
+		fmt.Println("2. Add task")
+		fmt.Println("3. Mark task as \"done\"")
+		fmt.Println("4. Delete task")
+		fmt.Println("5. Back to main menu")
+
+		fmt.Print("Choose an option: ")
+		scanner.Scan()
+
+		switch scanner.Text() {
+		case "1":
+			viewTasks()
+		case "2":
+			addTask(scanner)
+		case "3":
+			updateTask(scanner)
+		case "4":
+			deleteTask(scanner)
+		case "5":
+			return
+		default:
+			fmt.Println("Invalid option, choose an one from 1 to 5.")
+		}
+	}
 }
 
 func deleteList(scanner *bufio.Scanner) {
