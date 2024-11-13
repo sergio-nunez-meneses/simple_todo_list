@@ -60,6 +60,20 @@ func (handler *TodoListHandler) GetList(name string) *TodoList {
 	return handler.Lists[name]
 }
 
+func (handler *TodoListHandler) CreateList(scanner *bufio.Scanner) {
+	fmt.Println("\nEnter list name: ")
+	scanner.Scan()
+	listName := scanner.Text()
+
+	if handler.GetList(listName) != nil {
+		fmt.Println("\nList name already in use")
+		return
+	}
+
+	handler.SetEmptyList(listName)
+	fmt.Printf("\nNew list \"%s\" created successfully!", listName)
+}
+
 var todoLists = make(map[string]*TodoList)
 
 func handleUserInput(scanner *bufio.Scanner) {
@@ -80,7 +94,7 @@ func handleUserInput(scanner *bufio.Scanner) {
 		case "1":
 			handler.ShowLists()
 		case "2":
-			createList(scanner)
+			handler.CreateList(scanner)
 		case "3":
 			handleList(scanner)
 		case "4":
