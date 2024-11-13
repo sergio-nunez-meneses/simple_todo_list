@@ -19,14 +19,21 @@ type TodoList struct {
 	List []Task
 }
 
+// Class
 type TodoListHandler struct {
 	Lists map[string]*TodoList
 }
 
+// Constructor
 func ListHandler() *TodoListHandler {
 	return &TodoListHandler{
 		Lists: make(map[string]*TodoList),
 	}
+}
+
+// Methods
+func (handler *TodoListHandler) IsEmpty() bool {
+	return len(handler.Lists) == 0
 }
 
 var todoLists = make(map[string]*TodoList)
