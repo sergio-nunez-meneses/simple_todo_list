@@ -19,6 +19,16 @@ type TodoList struct {
 	List []Task
 }
 
+type TodoListHandler struct {
+	Lists map[string]*TodoList
+}
+
+func ListHandler() *TodoListHandler {
+	return &TodoListHandler{
+		Lists: make(map[string]*TodoList),
+	}
+}
+
 var todoLists = make(map[string]*TodoList)
 
 func main() {
