@@ -32,6 +32,7 @@ func handleUserInput(scanner *bufio.Scanner) {
 		fmt.Println("\nTODO Lists:")
 		fmt.Println("1. Show lists")
 		fmt.Println("2. Create new list")
+		fmt.Println("3. Delete list")
 		fmt.Println("5. Exit")
 
 		fmt.Print("Choose an option: ")
@@ -42,6 +43,8 @@ func handleUserInput(scanner *bufio.Scanner) {
 			showLists()
 		case "2":
 			createList(scanner)
+		case "3":
+			deleteList(scanner)
 		case "5":
 			fmt.Println("Exiting...")
 			return
@@ -108,6 +111,25 @@ func createList(scanner *bufio.Scanner) {
 		List: []Task{},
 	}
 	fmt.Printf("New list \"%s\" created successfully!", listName)
+}
+
+func deleteList(scanner *bufio.Scanner) {
+	if len(todoLists) == 0 {
+		fmt.Println("You need to add a new list.")
+		return
+	}
+
+	fmt.Println("Enter the list name to delete: ")
+	scanner.Scan()
+	listName := scanner.Text()
+
+	if !listExists(listName) {
+		fmt.Println("List does not exist.")
+		return
+	}
+
+	delete(todoLists, listName)
+	fmt.Printf("List \"%s\" deleted successfully!", listName)
 }
 
 func listExists(listName string) bool {
