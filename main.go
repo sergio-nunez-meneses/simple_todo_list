@@ -19,7 +19,7 @@ type TodoList struct {
 	List []Task
 }
 
-// Class
+// Class TodoListHandler
 type TodoListHandler struct {
 	Lists map[string]*TodoList
 }
@@ -36,6 +36,10 @@ func (handler *TodoListHandler) IsEmpty() bool {
 	return len(handler.Lists) == 0
 }
 
+func (handler *TodoListHandler) GetLists() map[string]*TodoList {
+	return handler.Lists
+}
+
 var todoLists = make(map[string]*TodoList)
 
 func main() {
@@ -44,7 +48,7 @@ func main() {
 
 func handleUserInput(scanner *bufio.Scanner) {
 	for {
-		fmt.Println("\nTODO Lists:")
+		fmt.Println("\nTODO list handler:")
 		fmt.Println("1. Show lists")
 		fmt.Println("2. Create new list")
 		fmt.Println("3. Add tasks to a list")
