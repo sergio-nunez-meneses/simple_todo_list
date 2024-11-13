@@ -112,24 +112,6 @@ func main() {
 	handleUserInput(bufio.NewScanner(os.Stdin))
 }
 
-func createList(scanner *bufio.Scanner) {
-	fmt.Println("Enter list name: ")
-	scanner.Scan()
-	listName := scanner.Text()
-
-	if listExists(listName) {
-		fmt.Println("List name already in use")
-		return
-	}
-
-	todoLists[listName] = &TodoList{
-		Id:   1,
-		Name: listName,
-		List: []Task{},
-	}
-	fmt.Printf("New list \"%s\" created successfully!", listName)
-}
-
 func handleList(scanner *bufio.Scanner) {
 	if len(todoLists) == 0 {
 		fmt.Println("You need to add a new list.")
