@@ -58,7 +58,7 @@ func ListHandler() *TodoListHandler {
 
 // Methods
 func (handler *TodoListHandler) ShowLists() {
-	if handler.IsEmpty() {
+	if handler.EmptyHandler() {
 		fmt.Println("\nNo new lists.")
 		return
 	}
@@ -74,7 +74,7 @@ func (handler *TodoListHandler) CreateList(scanner *bufio.Scanner) {
 	scanner.Scan()
 	listName := scanner.Text()
 
-	if handler.GetList(listName) != nil {
+	if handler.Lists[listName] != nil {
 		fmt.Println("\nList name already in use")
 		return
 	}
@@ -84,7 +84,7 @@ func (handler *TodoListHandler) CreateList(scanner *bufio.Scanner) {
 }
 
 func (handler *TodoListHandler) UpdateList(scanner *bufio.Scanner) {
-	if handler.IsEmpty() {
+	if handler.EmptyHandler() {
 		fmt.Println("\nYou need to add a new list.")
 		return
 	}
@@ -92,9 +92,9 @@ func (handler *TodoListHandler) UpdateList(scanner *bufio.Scanner) {
 	fmt.Println("\nEnter the list name to update:")
 	scanner.Scan()
 	listName := scanner.Text()
-	list := handler.GetList(listName)
 
-	if list == nil {
+	list, exists := handler.Lists[listName]
+	if exists {
 		fmt.Println("\nList does not exist.")
 		return
 	}
@@ -128,7 +128,7 @@ func (handler *TodoListHandler) UpdateList(scanner *bufio.Scanner) {
 }
 
 func (handler *TodoListHandler) DeleteList(scanner *bufio.Scanner) {
-	if handler.IsEmpty() {
+	if handler.EmptyHandler() {
 		fmt.Println("\nYou need to add a new list.")
 		return
 	}
@@ -137,7 +137,7 @@ func (handler *TodoListHandler) DeleteList(scanner *bufio.Scanner) {
 	scanner.Scan()
 	listName := scanner.Text()
 
-	if handler.GetList(listName) == nil {
+	if handler.Lists[listName] == nil {
 		fmt.Println("\nList does not exist.")
 		return
 	}
@@ -146,11 +146,7 @@ func (handler *TodoListHandler) DeleteList(scanner *bufio.Scanner) {
 	fmt.Printf("\nList \"%s\" deleted successfully!", listName)
 }
 
-func (handler *TodoListHandler) GetList(name string) *TodoList {
-	return handler.Lists[name]
-}
-
-func (handler *TodoListHandler) IsEmpty() bool {
+func (handler *TodoListHandler) EmptyHandler() bool {
 	return len(handler.Lists) == 0
 }
 
