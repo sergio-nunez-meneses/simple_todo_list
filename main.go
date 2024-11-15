@@ -14,6 +14,15 @@ type TodoList struct {
 	Tasks []Task
 }
 
+// Constructor
+func NewTodoList(name string) *TodoList {
+	return &TodoList{
+		Id:    1,
+		Name:  name,
+		Tasks: []Task{},
+	}
+}
+
 // Class TodoListHandler
 type TodoListHandler struct {
 	Lists map[string]*TodoList
@@ -49,7 +58,7 @@ func (handler *TodoListHandler) CreateList(scanner *bufio.Scanner) {
 		return
 	}
 
-	handler.SetEmptyList(listName)
+	handler.Lists[listName] = NewTodoList(listName)
 	fmt.Printf("\nNew list \"%s\" created successfully!", listName)
 }
 
@@ -117,14 +126,6 @@ func (handler *TodoListHandler) DeleteList(scanner *bufio.Scanner) {
 	fmt.Printf("\nList \"%s\" deleted successfully!", listName)
 }
 
-func (handler *TodoListHandler) SetEmptyList(name string) {
-	handler.Lists[name] = &TodoList{
-		Id:    1,
-		Name:  name,
-		Tasks: []Task{},
-	}
-}
-
 func (handler *TodoListHandler) GetList(name string) *TodoList {
 	return handler.Lists[name]
 }
@@ -133,12 +134,14 @@ func (handler *TodoListHandler) IsEmpty() bool {
 	return len(handler.Lists) == 0
 }
 
+// Class Task
 type Task struct {
 	Id    int
 	Title string
 	Done  bool
 }
 
+// Constructor
 func (task *Task) SetTask(id int, name string) *Task {
 	return &Task{
 		Id:    id,
