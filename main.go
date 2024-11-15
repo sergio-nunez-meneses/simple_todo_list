@@ -7,12 +7,7 @@ import (
 	"strconv"
 )
 
-type Task struct {
-	Id    int
-	Title string
-	Done  bool
-}
-
+// Class TodoList
 type TodoList struct {
 	Id    int
 	Name  string
@@ -32,10 +27,6 @@ func ListHandler() *TodoListHandler {
 }
 
 // Methods
-func (handler *TodoListHandler) IsEmpty() bool {
-	return len(handler.Lists) == 0
-}
-
 func (handler *TodoListHandler) ShowLists() {
 	if handler.IsEmpty() {
 		fmt.Println("\nNo new lists.")
@@ -46,18 +37,6 @@ func (handler *TodoListHandler) ShowLists() {
 	for _, list := range handler.Lists {
 		fmt.Printf("- %s\n", list.Name)
 	}
-}
-
-func (handler *TodoListHandler) SetEmptyList(name string) {
-	handler.Lists[name] = &TodoList{
-		Id:    1,
-		Name:  name,
-		Tasks: []Task{},
-	}
-}
-
-func (handler *TodoListHandler) GetList(name string) *TodoList {
-	return handler.Lists[name]
 }
 
 func (handler *TodoListHandler) CreateList(scanner *bufio.Scanner) {
@@ -138,6 +117,44 @@ func (handler *TodoListHandler) DeleteList(scanner *bufio.Scanner) {
 	fmt.Printf("\nList \"%s\" deleted successfully!", listName)
 }
 
+func (handler *TodoListHandler) SetEmptyList(name string) {
+	handler.Lists[name] = &TodoList{
+		Id:    1,
+		Name:  name,
+		Tasks: []Task{},
+	}
+}
+
+func (handler *TodoListHandler) GetList(name string) *TodoList {
+	return handler.Lists[name]
+}
+
+func (handler *TodoListHandler) IsEmpty() bool {
+	return len(handler.Lists) == 0
+}
+
+type Task struct {
+	Id    int
+	Title string
+	Done  bool
+}
+
+func showTasks(list *TodoList) {
+	if len(list.Tasks) == 0 {
+		fmt.Println("No new tasks.")
+		return
+	}
+
+	fmt.Printf("Tasks in list \"%s\":\n", list.Name)
+	for _, task := range list.Tasks {
+		taskDone := "(task in progress)"
+		if task.Done {
+			taskDone = "(task done)"
+		}
+		fmt.Printf("%d. %s %s\n", task.Id, task.Title, taskDone)
+	}
+}
+
 func handleUserInput(scanner *bufio.Scanner) {
 	handler := ListHandler()
 
@@ -172,22 +189,6 @@ func handleUserInput(scanner *bufio.Scanner) {
 
 func main() {
 	handleUserInput(bufio.NewScanner(os.Stdin))
-}
-
-func showTasks(list *TodoList) {
-	if len(list.Tasks) == 0 {
-		fmt.Println("No new tasks.")
-		return
-	}
-
-	fmt.Printf("Tasks in list \"%s\":\n", list.Name)
-	for _, task := range list.Tasks {
-		taskDone := "(task in progress)"
-		if task.Done {
-			taskDone = "(task done)"
-		}
-		fmt.Printf("%d. %s %s\n", task.Id, task.Title, taskDone)
-	}
 }
 
 func addTask(scanner *bufio.Scanner, list *TodoList) {
