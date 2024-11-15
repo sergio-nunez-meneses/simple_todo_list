@@ -14,9 +14,9 @@ type Task struct {
 }
 
 type TodoList struct {
-	Id   int
-	Name string
-	List []Task
+	Id    int
+	Name  string
+	Tasks []Task
 }
 
 // Class TodoListHandler
@@ -50,9 +50,9 @@ func (handler *TodoListHandler) ShowLists() {
 
 func (handler *TodoListHandler) SetEmptyList(name string) {
 	handler.Lists[name] = &TodoList{
-		Id:   1,
-		Name: name,
-		List: []Task{},
+		Id:    1,
+		Name:  name,
+		Tasks: []Task{},
 	}
 }
 
@@ -175,13 +175,13 @@ func main() {
 }
 
 func showTasks(list *TodoList) {
-	if len(list.List) == 0 {
+	if len(list.Tasks) == 0 {
 		fmt.Println("No new tasks.")
 		return
 	}
 
 	fmt.Printf("Tasks in list \"%s\":\n", list.Name)
-	for _, task := range list.List {
+	for _, task := range list.Tasks {
 		taskDone := "(task in progress)"
 		if task.Done {
 			taskDone = "(task done)"
@@ -200,13 +200,13 @@ func addTask(scanner *bufio.Scanner, list *TodoList) {
 		Title: taskTitle,
 		Done:  false,
 	}
-	list.List = append(list.List, task)
+	list.Tasks = append(list.Tasks, task)
 	list.Id++
 	fmt.Printf("Task \"%s\" added successfully to list \"%s\"!\n", taskTitle, list.Name)
 }
 
 func updateTask(scanner *bufio.Scanner, list *TodoList) {
-	if len(list.List) == 0 {
+	if len(list.Tasks) == 0 {
 		fmt.Println("You need to add a new task.")
 		return
 	}
@@ -221,11 +221,11 @@ func updateTask(scanner *bufio.Scanner, list *TodoList) {
 		return
 	}
 
-	for i := range list.List {
-		if list.List[i].Id == id {
-			if !list.List[i].Done {
-				list.List[i].Done = true
-				fmt.Printf("Task \"%s\" updated successfully from list \"%s\"!\n", list.List[i].Title, list.Name)
+	for i := range list.Tasks {
+		if list.Tasks[i].Id == id {
+			if !list.Tasks[i].Done {
+				list.Tasks[i].Done = true
+				fmt.Printf("Task \"%s\" updated successfully from list \"%s\"!\n", list.Tasks[i].Title, list.Name)
 				break
 			}
 		}
@@ -233,7 +233,7 @@ func updateTask(scanner *bufio.Scanner, list *TodoList) {
 }
 
 func deleteTask(scanner *bufio.Scanner, list *TodoList) {
-	if len(list.List) == 0 {
+	if len(list.Tasks) == 0 {
 		fmt.Println("You need to add a new task.")
 		return
 	}
@@ -249,10 +249,10 @@ func deleteTask(scanner *bufio.Scanner, list *TodoList) {
 	}
 
 	idExists := false
-	for i := range list.List {
-		if list.List[i].Id == id {
-			taskTitle := list.List[i].Title
-			list.List = append(list.List[:i], list.List[i+1:]...)
+	for i := range list.Tasks {
+		if list.Tasks[i].Id == id {
+			taskTitle := list.Tasks[i].Title
+			list.Tasks = append(list.Tasks[:i], list.Tasks[i+1:]...)
 			fmt.Printf("Task \"%s\" deleted successfully from list \"%s\"!\n", taskTitle, list.Name)
 			idExists = true
 			break
