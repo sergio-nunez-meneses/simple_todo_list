@@ -79,7 +79,7 @@ func (handler *TodoListHandler) UpdateList(scanner *bufio.Scanner) {
 		case "2":
 			list.AddTask(scanner, list)
 		case "3":
-			updateTask(scanner, list)
+			list.UpdateTask(scanner, list)
 		case "4":
 			deleteTask(scanner, list)
 		case "5":
@@ -106,7 +106,7 @@ func (handler *TodoListHandler) DeleteList(scanner *bufio.Scanner) {
 	}
 
 	delete(handler.Lists, listName)
-	fmt.Printf("\nList \"%s\" deleted successfully!", listName)
+	fmt.Printf("\nList \"%s\" deleted successfully!\n", listName)
 }
 
 func (handler *TodoListHandler) EmptyHandler() bool {
@@ -117,7 +117,7 @@ func (handler *TodoListHandler) EmptyHandler() bool {
 type TodoList struct {
 	Id    int
 	Name  string
-	Tasks []Task
+	Tasks []*Task
 }
 
 // Constructor
@@ -125,7 +125,7 @@ func NewTodoList(name string) *TodoList {
 	return &TodoList{
 		Id:    1,
 		Name:  name,
-		Tasks: []Task{},
+		Tasks: []*Task{},
 	}
 }
 
@@ -156,6 +156,33 @@ func (todoList *TodoList) AddTask(scanner *bufio.Scanner, list *TodoList) {
 	fmt.Printf("\nTask \"%s\" added successfully to list \"%s\"!\n", taskTitle, list.Name)
 }
 
+func (todoList *TodoList) UpdateTask(scanner *bufio.Scanner, list *TodoList) {
+	if list.EmptyTasks() {
+		fmt.Println("You need to add a new task.")
+		return
+	}
+
+	fmt.Print("\nEnter the task id to update: ")
+	scanner.Scan()
+	input := scanner.Text()
+
+	id, err := strconv.Atoi(input)
+	if err != nil {
+		fmt.Println("\nInvalid Id.")
+		return
+	}
+
+	for _, task := range list.Tasks {
+		if task.Id == id {
+			if !task.Done {
+				task.MarkAsDone()
+				fmt.Printf("\nTask \"%s\" updated successfully from list \"%s\"!\n", task.Title, list.Name)
+				break
+			}
+		}
+	}
+}
+
 func (todoList *TodoList) EmptyTasks() bool {
 	return len(todoList.Tasks) == 0
 }
@@ -168,12 +195,17 @@ type Task struct {
 }
 
 // Constructor
-func NewTask(id int, name string) Task {
-	return Task{
+func NewTask(id int, name string) *Task {
+	return &Task{
 		Id:    id,
 		Title: name,
 		Done:  false,
 	}
+}
+
+// Method
+func (task *Task) MarkAsDone() {
+	task.Done = true
 }
 
 func handleUserInput(scanner *bufio.Scanner) {
@@ -210,33 +242,6 @@ func handleUserInput(scanner *bufio.Scanner) {
 
 func main() {
 	handleUserInput(bufio.NewScanner(os.Stdin))
-}
-
-func updateTask(scanner *bufio.Scanner, list *TodoList) {
-	if len(list.Tasks) == 0 {
-		fmt.Println("You need to add a new task.")
-		return
-	}
-
-	fmt.Print("\nEnter the task id to update: ")
-	scanner.Scan()
-	input := scanner.Text()
-
-	id, err := strconv.Atoi(input)
-	if err != nil {
-		fmt.Println("Invalid Id.")
-		return
-	}
-
-	for i := range list.Tasks {
-		if list.Tasks[i].Id == id {
-			if !list.Tasks[i].Done {
-				list.Tasks[i].Done = true
-				fmt.Printf("Task \"%s\" updated successfully from list \"%s\"!\n", list.Tasks[i].Title, list.Name)
-				break
-			}
-		}
-	}
 }
 
 func deleteTask(scanner *bufio.Scanner, list *TodoList) {
