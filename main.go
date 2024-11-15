@@ -23,6 +23,27 @@ func NewTodoList(name string) *TodoList {
 	}
 }
 
+// Methods
+func (todoList *TodoList) ShowTasks() {
+	if todoList.EmptyTasks() {
+		fmt.Println("\nNo new tasks.")
+		return
+	}
+
+	fmt.Printf("Tasks in list \"%s\":\n", todoList.Name)
+	for _, task := range todoList.Tasks {
+		taskDone := "(task in progress)"
+		if task.Done {
+			taskDone = "(task done)"
+		}
+		fmt.Printf("%d. %s %s\n", task.Id, task.Title, taskDone)
+	}
+}
+
+func (todoList *TodoList) EmptyTasks() bool {
+	return len(todoList.Tasks) == 0
+}
+
 // Class TodoListHandler
 type TodoListHandler struct {
 	Lists map[string]*TodoList
@@ -79,7 +100,7 @@ func (handler *TodoListHandler) UpdateList(scanner *bufio.Scanner) {
 	}
 
 	for {
-		fmt.Printf("\nUpdating list \"%s\":", listName)
+		fmt.Printf("\nUpdating list \"%s\":\n", listName)
 		fmt.Println("1. Show tasks")
 		fmt.Println("2. Create task")
 		fmt.Println("3. Mark task as \"done\"")
@@ -90,9 +111,8 @@ func (handler *TodoListHandler) UpdateList(scanner *bufio.Scanner) {
 		scanner.Scan()
 
 		switch scanner.Text() {
-		// TODO: Create Task methods
 		case "1":
-			showTasks(list)
+			list.ShowTasks()
 		case "2":
 			addTask(scanner, list)
 		case "3":
@@ -147,22 +167,6 @@ func (task *Task) SetTask(id int, name string) *Task {
 		Id:    id,
 		Title: name,
 		Done:  false,
-	}
-}
-
-func showTasks(list *TodoList) {
-	if len(list.Tasks) == 0 {
-		fmt.Println("No new tasks.")
-		return
-	}
-
-	fmt.Printf("Tasks in list \"%s\":\n", list.Name)
-	for _, task := range list.Tasks {
-		taskDone := "(task in progress)"
-		if task.Done {
-			taskDone = "(task done)"
-		}
-		fmt.Printf("%d. %s %s\n", task.Id, task.Title, taskDone)
 	}
 }
 
