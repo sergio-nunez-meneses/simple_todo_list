@@ -139,6 +139,14 @@ type Task struct {
 	Done  bool
 }
 
+func (task *Task) SetTask(id int, name string) *Task {
+	return &Task{
+		Id:    id,
+		Title: name,
+		Done:  false,
+	}
+}
+
 func showTasks(list *TodoList) {
 	if len(list.Tasks) == 0 {
 		fmt.Println("No new tasks.")
