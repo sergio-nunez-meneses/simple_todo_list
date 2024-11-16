@@ -52,7 +52,7 @@ func (handler *TodoListHandler) UpdateList(scanner *bufio.Scanner) {
 		return
 	}
 
-	fmt.Println("\nEnter the list name to update:")
+	fmt.Println("\nEnter the list name to update: ")
 	scanner.Scan()
 	listName := scanner.Text()
 
@@ -81,7 +81,7 @@ func (handler *TodoListHandler) UpdateList(scanner *bufio.Scanner) {
 		case "3":
 			list.UpdateTask(scanner, list)
 		case "4":
-			deleteTask(scanner, list)
+			list.DeleteTask(scanner, list)
 		case "5":
 			return
 		default:
@@ -96,7 +96,7 @@ func (handler *TodoListHandler) DeleteList(scanner *bufio.Scanner) {
 		return
 	}
 
-	fmt.Println("\nEnter the list name to delete:")
+	fmt.Println("\nEnter the list name to delete: ")
 	scanner.Scan()
 	listName := scanner.Text()
 
@@ -136,7 +136,7 @@ func (todoList *TodoList) ShowTasks() {
 		return
 	}
 
-	fmt.Printf("Tasks in list \"%s\":\n", todoList.Name)
+	fmt.Printf("\nTasks in list \"%s\":\n", todoList.Name)
 	for _, task := range todoList.Tasks {
 		taskDone := "(task in progress)"
 		if task.Done {
@@ -158,11 +158,11 @@ func (todoList *TodoList) AddTask(scanner *bufio.Scanner, list *TodoList) {
 
 func (todoList *TodoList) UpdateTask(scanner *bufio.Scanner, list *TodoList) {
 	if list.EmptyTasks() {
-		fmt.Println("You need to add a new task.")
+		fmt.Println("\nYou need to add a new task.")
 		return
 	}
 
-	fmt.Print("\nEnter the task id to update: ")
+	fmt.Println("\nEnter the task id to update: ")
 	scanner.Scan()
 	input := scanner.Text()
 
@@ -181,6 +181,34 @@ func (todoList *TodoList) UpdateTask(scanner *bufio.Scanner, list *TodoList) {
 			}
 		}
 	}
+}
+
+func (todoList *TodoList) DeleteTask(scanner *bufio.Scanner, list *TodoList) {
+	if list.EmptyTasks() {
+		fmt.Println("\nYou need to add a new task.")
+		return
+	}
+
+	fmt.Print("\nEnter the task id to delete: ")
+	scanner.Scan()
+	input := scanner.Text()
+
+	id, err := strconv.Atoi(input)
+	if err != nil {
+		fmt.Println("\nInvalid id.")
+		return
+	}
+
+	if len(list.Tasks) < id {
+		fmt.Printf("\nTask with id %d not found.\n", id)
+		return
+	}
+
+	id = id - 1
+	task := list.Tasks[id]
+	taskTitle := task.Title
+	list.Tasks = append(list.Tasks[:id], list.Tasks[id+1:]...)
+	fmt.Printf("\nTask \"%s\" deleted successfully from list \"%s\"!\n", taskTitle, list.Name)
 }
 
 func (todoList *TodoList) EmptyTasks() bool {
@@ -242,36 +270,4 @@ func handleUserInput(scanner *bufio.Scanner) {
 
 func main() {
 	handleUserInput(bufio.NewScanner(os.Stdin))
-}
-
-func deleteTask(scanner *bufio.Scanner, list *TodoList) {
-	if len(list.Tasks) == 0 {
-		fmt.Println("You need to add a new task.")
-		return
-	}
-
-	fmt.Print("\nEnter the task id to delete: ")
-	scanner.Scan()
-	input := scanner.Text()
-
-	id, err := strconv.Atoi(input)
-	if err != nil {
-		fmt.Println("Invalid id.")
-		return
-	}
-
-	idExists := false
-	for i := range list.Tasks {
-		if list.Tasks[i].Id == id {
-			taskTitle := list.Tasks[i].Title
-			list.Tasks = append(list.Tasks[:i], list.Tasks[i+1:]...)
-			fmt.Printf("Task \"%s\" deleted successfully from list \"%s\"!\n", taskTitle, list.Name)
-			idExists = true
-			break
-		}
-	}
-
-	if !idExists {
-		fmt.Printf("Task with id %d not found.\n", id)
-	}
 }
